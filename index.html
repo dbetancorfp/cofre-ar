@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cofre — Realidad Aumentada</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
+</head>
+<body>
+
+<model-viewer
+    id="viewer"
+    src="ptp_cofre.glb"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    tone-mapping="neutral"
+    shadow-intensity="1">
+
+  <button class="Hotspot" slot="hotspot-1"
+      data-position="0.023474744450491594m 0.10434869894262322m -0.6475625287134725m"
+      data-normal="-0.014350539781864558m 0.16401714071748566m 0.9863531008512265m"
+      data-visibility-attribute="visible">
+    <div class="HotspotAnnotation">Cerrojo</div>
+  </button>
+
+  <button class="Hotspot" slot="hotspot-2"
+      data-position="0.025832737885746m 0.2760421054892277m -0.7889920708468068m"
+      data-normal="0.011623967013863224m 0.920394933110035m 0.3908171573718777m"
+      data-visibility-attribute="visible">
+    <div class="HotspotAnnotation">Lomo</div>
+  </button>
+
+  <button class="Hotspot" slot="hotspot-3"
+      data-position="0.02016030441979503m 0.09146776522331324m -0.9828515749521312m"
+      data-normal="0.1356268414709176m -0.3021559572652023m -0.9435608816402744m"
+      data-visibility-attribute="visible">
+    <div class="HotspotAnnotation">Trasera</div>
+  </button>
+
+  <div class="progress-bar hide" slot="progress-bar">
+    <div class="update-bar"></div>
+  </div>
+
+  <button slot="ar-button" id="ar-button">Ver en tu espacio</button>
+
+</model-viewer>
+
+<script>
+  // Mostrar/ocultar la etiqueta al pulsar el hotspot (no al pasar el ratón).
+  // Solo una etiqueta abierta a la vez.
+  document.querySelectorAll('.Hotspot').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var wasOpen = btn.classList.contains('is-open');
+      document.querySelectorAll('.Hotspot').forEach(function (b) {
+        b.classList.remove('is-open');
+      });
+      if (!wasOpen) btn.classList.add('is-open');
+    });
+  });
+
+  // Barra de progreso de carga del modelo
+  var viewer = document.querySelector('#viewer');
+  viewer.addEventListener('progress', function (event) {
+    var bar = viewer.querySelector('.update-bar');
+    var progressBar = viewer.querySelector('.progress-bar');
+    var pct = event.detail.totalProgress * 100;
+    bar.style.width = pct + '%';
+    if (pct === 100) {
+      progressBar.classList.add('hide');
+    } else {
+      progressBar.classList.remove('hide');
+    }
+  });
+</script>
+
+</body>
+</html>
